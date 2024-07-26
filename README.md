@@ -1,6 +1,8 @@
 ## Simple Django REST API implementation with elasticsearch and jwt authentication
 
 
+First, create .env file and copy everything from .env-sample file into .env file
+
 
 How to run:
 ```
