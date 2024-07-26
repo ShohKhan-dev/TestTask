@@ -14,8 +14,7 @@ from pathlib import Path
 import os
 from datetime import timedelta
 from elasticsearch_dsl import connections
-
-
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,10 +24,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-@a67xv&lmmlcjcg4qeg2j17y2)t-+7^k0nzwxkg7k1q+igz--1'
+# SECRET_KEY = ''
+
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -110,11 +112,11 @@ WSGI_APPLICATION = 'core.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DATABASE_NAME', 'testdatabase'),
-        'USER': os.getenv('DATABASE_USER', 'testuser'),
-        'PASSWORD': os.getenv('DATABASE_PASSWORD', 'mypassword'),
-        'HOST': os.getenv('DATABASE_HOST', 'db'),
-        'PORT': os.getenv('DATABASE_PORT', '5432'),
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASSWORD'),
+        'HOST': config('DATABASE_HOST'),
+        'PORT': config('DATABASE_PORT'),
     }
 }
 
@@ -161,9 +163,9 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Additional locations the staticfiles app will traverse if the FileSystemFinder finder is enabled
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -175,6 +177,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'http://es:9200'
+        'hosts': config('ELASTICSEARCH_HOST') + ':' + config('ELASTICSEARCH_PORT')
     }
 }

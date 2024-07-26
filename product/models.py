@@ -18,25 +18,25 @@ class PathAndRename:
 class Category(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField()
-    image = models.ImageField(upload_to=PathAndRename('categories/'))
+    image = models.ImageField(upload_to=PathAndRename('categories/'), null=True, blank=True)
 
     def __str__(self):
         return self.title
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        img = Image.open(self.image.path)
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 800 or img.width > 800:
+                output_size = (800, 800)
+                img.thumbnail(output_size)
+                img.save(self.image.path)
 
-        if img.height > 800 or img.width > 800:
-            output_size = (800, 800)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
-            
 
 class Product(models.Model):
     title = models.CharField(max_length=255)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    image = models.ImageField(upload_to=PathAndRename('products/'))
+    image = models.ImageField(upload_to=PathAndRename('products/'), null=True, blank=True)
     description = models.TextField()
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
 
@@ -45,9 +45,9 @@ class Product(models.Model):
     
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        img = Image.open(self.image.path)
-
-        if img.height > 800 or img.width > 800:
-            output_size = (800, 800)
-            img.thumbnail(output_size)
-            img.save(self.image.path)
+        if self.image:
+            img = Image.open(self.image.path)
+            if img.height > 800 or img.width > 800:
+                output_size = (800, 800)
+                img.thumbnail(output_size)
+                img.save(self.image.path)

@@ -5,6 +5,7 @@ from product.models import Category, Product
 from product.serializers import CategorySerializer, ProductSerializer, UserRegistrationSerializer
 from django.views import View
 from product.documents import ProductDocument
+from rest_framework.views import APIView
 
 
 class UserRegistrationView(generics.CreateAPIView):
@@ -21,16 +22,23 @@ class UserRegistrationView(generics.CreateAPIView):
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAuthenticated]
+
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated]
+
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
 
-class SearchView(View):
+class SearchView(APIView):
+    permission_classes = [AllowAny]
+    # permission_classes = [IsAuthenticated] 
+
     def get(self, request):
         query = request.GET.get('q', '')
         if query:

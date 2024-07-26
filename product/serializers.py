@@ -12,8 +12,6 @@ class ProductSerializer(serializers.ModelSerializer):
         model = Product
         fields = ['id', 'title', 'price', 'image', 'description', 'category']
 
-
-
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
